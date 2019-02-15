@@ -66,12 +66,14 @@ while True:
         try:
             total_size += Decimal(text)
         except:
-            print("Tried to add a value that wasn't the filesize, oops")
-
+            break #this is trying to add a colection... no thx skip
         if x < 10:
             print(" " + spacer + str(x) + "| Running total = " + str(total_size))
+        elif x < 100:
+            print(spacer + str(x) + "| Running total = " + str(total_size))
         else:
-            print("" + spacer + str(x) + "| Running total = " + str(total_size))
+            print(str(x) + "| Running total = " + str(total_size))
+
         x += 1
         
     print("\nTotal = " + str(total_size))
