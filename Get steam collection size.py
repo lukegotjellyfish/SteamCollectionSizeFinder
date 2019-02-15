@@ -4,7 +4,7 @@ from decimal import Decimal
 import fnmatch
 import time
 
-url = "https://steamcommunity.com/sharedfiles/filedetails/?id=1645890656"
+url = "https://steamcommunity.com/sharedfiles/filedetails/?id=1646796348"
 html = urlopen(url).read()
 soup = BeautifulSoup(html, features="html.parser")
 
@@ -73,5 +73,5 @@ for i in new_text:
         print("" + spacer + str(x) + "| Running total = " + str(total_size))
     x += 1
     
-print("Total = " + str(total_size))
+print("\nTotal = " + str(total_size))
 halt = input('"Paused"')
