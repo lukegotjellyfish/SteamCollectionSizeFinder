@@ -29,20 +29,22 @@ while True:
 
     #go through each mod in collection to get filesize
     x = 1
+    link_bank = []
     total_size = 0
     if (len(new_text) > 100):
         spacer = " "  #Make the output look more... a e s t h e t i c
     else:
-        spacer = ""
-        
+        spacer = "" 
     print("")
+
     for i in new_text:
         url = str(i)
-
-        #at least it works
         try:
-            html = urlopen(url).read()
+            if link_bank.index(url):
+                continue  #ignore duplicate link
         except:
+            link_bank.append(str(i))  #add to list of unique links
+            #at least it works
             try:
                 html = urlopen(url).read()
             except:
@@ -58,23 +60,26 @@ while True:
                             try:
                                 html = urlopen(url).read()
                             except:
-                                html = urlopen(url).read()
+                                try:
+                                    html = urlopen(url).read()
+                                except:
+                                    html = urlopen(url).read()
 
-        soup = BeautifulSoup(html, features="html.parser")
-        text = (soup.select('.detailsStatRight')[0].text.strip()).replace(" MB", "").replace(",","")
+            soup = BeautifulSoup(html, features="html.parser")
+            text = (soup.select('.detailsStatRight')[0].text.strip()).replace(" MB", "").replace(",","")
 
-        try:
-            total_size += Decimal(text)
-        except:
-            break #this is trying to add a colection... no thx skip
-        if x < 10:
-            print(" " + spacer + str(x) + "| Running total = " + str(total_size))
-        elif x < 100:
-            print(spacer + str(x) + "| Running total = " + str(total_size))
-        else:
-            print(str(x) + "| Running total = " + str(total_size))
+            try:
+                total_size += Decimal(text)
+            except:
+                break #this is trying to add a colection... no thx skip
+            if x < 10:
+                print(" " + spacer + str(x) + "| Running total = " + str(total_size))
+            elif x < 100:
+                print(spacer + str(x) + "| Running total = " + str(total_size))
+            else:
+                print(str(x) + "| Running total = " + str(total_size))
 
-        x += 1
+            x += 1
         
     print("\nTotal = " + str(total_size))
     halt = input('"Paused" press ENTER to continue...')
