@@ -6,6 +6,7 @@ import requests
 import fnmatch
 
 def add_another(input_url):
+    addon_count -= 1
     req = Request(input_url)
     html_page = urlopen(req)
     soup = BeautifulSoup(html_page, "lxml")
@@ -16,6 +17,7 @@ def add_another(input_url):
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
     links = list(dict.fromkeys(links))
+    addon_count += len(links)
 
     len_links = len(links)
     if len_links >= 100:
@@ -92,7 +94,8 @@ def add_another(input_url):
 
 
 
-
+global addon_count
+addon_count = 0
 
 sizes = []
 input_url = []
@@ -111,7 +114,7 @@ for i in range(0, len(input_url)):
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
     links = list(dict.fromkeys(links))
-
+    addon_count += len(links)
 
     if (len(links) >= 100):
         spacer = " "  #Make the output look more... a e s t h e t i c
