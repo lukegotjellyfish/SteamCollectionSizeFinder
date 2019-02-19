@@ -15,20 +15,27 @@ def add_another(input_url):
         links.append(str(link.get('href')))
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
-    print("\nCollection Addon Count: " + str(len(links)/2)[:-2])
     links = list(dict.fromkeys(links))
 
+    len_links = len(links)
+    if len_links >= 100:
+        spacer = "    "  #Make the output look more... a e s t h e t i c
+    else:
+        spacer = "   "
+
+    if len_links >= 100:
+        print("\n   Collection Addon Count: " + str(len_links))
+    elif len_links >= 10:
+        print("\n  Collection Addon Count: " + str(len_links))
+    else:
+        print("\n Collection Addon Count: " + str(len_links))
+
+
+        
     #go through each mod in collection to get filesize
     x = 1
     link_bank = []
     total_size = 0
-
-    if (len(links) >= 100):
-        spacer = "  "  #Make the output look more... a e s t h e t i c
-    elif (len(links)) >= 10:
-        spacer = " "
-    else:
-        spacer = ""
 
     for i in links:
         url = i
@@ -103,21 +110,22 @@ for i in range(0, len(input_url)):
         links.append(str(link.get('href')))
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
-    print("Addon Count: " + str(len(links)/2)[:-2])
     links = list(dict.fromkeys(links))
+
+
+    if (len(links) >= 100):
+        spacer = " "  #Make the output look more... a e s t h e t i c
+    else:
+        spacer = ""
+
+    print("\n" + spacer + "Collection Addon Count: " + str(len(links)))
+
 
 
     #go through each mod in collection to get filesize
     x = 1
     link_bank = []
     total_size = 0
-
-    if (len(links) >= 100):
-        spacer = "  "  #Make the output look more... a e s t h e t i c
-    elif (len(links)) >= 10:
-        spacer = " "
-    else:
-        spacer = ""
 
     for i in links:
         url = i
@@ -155,7 +163,7 @@ for i in range(0, len(input_url)):
                 total_size += add_another(url)
 
         if x < 10:
-            print(spacer + str(x) + "| Running total = " + str(total_size))
+            print(" " + spacer + str(x) + "| Running total = " + str(total_size))
         elif x < 100:
             print(spacer + str(x) + "| Running total = " + str(total_size))
         else:
