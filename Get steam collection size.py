@@ -5,27 +5,17 @@ from lxml import html
 import requests
 import fnmatch
 
-sizes = []
-input_url = []
-with open("Collections.txt") as url_file:
-    for line in url_file:
-        input_url.append(line)
-
-for i in range(0, len(input_url)):
-    req = Request(input_url[i])
+def add_another(input_url):
+    req = Request(input_url)
     html_page = urlopen(req)
     soup = BeautifulSoup(html_page, "lxml")
 
     links = []
-    x = 2
-
     for link in soup.findAll('a', class_=False, href=True, target=False):  #get links and filter out unwanted class and target html
-        if x%2 == 0:
-            links.append(str(link.get('href')))
-        x += 1
+        links.append(str(link.get('href')))
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
-    print("Addon Count: " + str(len(links)) + "\n")
+    print("Addon Count: " + str(len(links)/2))
 
 
     #go through each mod in collection to get filesize
@@ -70,8 +60,93 @@ for i in range(0, len(input_url)):
         try:
             total_size += Decimal(file_size)
         except:
-            continue
+            if file_size == "Unique Visit":
+                input_url.append(file_size)  # this is a collection on the collection
+                continue
+
+        if x < 10:
+            print(" " + spacer + str(x) + "| Running total = " + str(total_size))
+        elif x < 100:
+            print(spacer + str(x) + "| Running total = " + str(total_size))
+        else:
+            print(str(x) + "| Running total = " + str(total_size))
+        x += 1
+    
+    return total_size
+
+
+
+
+    
+
+
+
+
+
+sizes = []
+input_url = []
+with open("Collections.txt") as url_file:
+    for line in url_file:
+        input_url.append(line)
+
+for i in range(0, len(input_url)):
+    req = Request(input_url[i])
+    html_page = urlopen(req)
+    soup = BeautifulSoup(html_page, "lxml")
+
+    links = []
+    for link in soup.findAll('a', class_=False, href=True, target=False):  #get links and filter out unwanted class and target html
+        links.append(str(link.get('href')))
         
+    links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
+    print("Addon Count: " + str(len(links)/2))
+
+
+    #go through each mod in collection to get filesize
+    x = 1
+    link_bank = []
+    total_size = 0
+
+    if (len(links) > 100):
+        spacer = " "  #Make the output look more... a e s t h e t i c
+    else:
+        spacer = "" 
+
+    for i in links:
+        url = i
+
+        try:
+            if link_bank.index(url):
+                continue  #ignore duplicate link (if this somehow happens, just in case)
+
+        except:
+            link_bank.append(str(i))  #add to list of unique links
+            #at least it works
+        try:
+            page = requests.get(url)
+            tree = html.fromstring(page.content)
+            file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+            file_size = (file_size[0])[:-3].replace(",", "")
+        except:
+            try:
+                page = requests.get(url)
+                tree = html.fromstring(page.content)
+                file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+            except:
+                try:
+                    page = requests.get(url)
+                    tree = html.fromstring(page.content)
+                    file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+                except:
+                    continue  #oof
+    
+
+        try:
+            total_size += Decimal(file_size)
+        except:
+            if file_size == "Unique Visit":
+                total_size += add_another(url)
+
         if x < 10:
             print(" " + spacer + str(x) + "| Running total = " + str(total_size))
         elif x < 100:
