@@ -48,11 +48,24 @@ for i in range(0, len(input_url)-1):
         except:
             link_bank.append(str(i))  #add to list of unique links
             #at least it works
-
-        page = requests.get(url)
-        tree = html.fromstring(page.content)
-        file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
-        file_size = (file_size[0])[:-3].replace(",", "")
+        try:
+            page = requests.get(url)
+            tree = html.fromstring(page.content)
+            file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+            file_size = (file_size[0])[:-3].replace(",", "")
+        except:
+            try:
+                page = requests.get(url)
+                tree = html.fromstring(page.content)
+                file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+            except:
+                try:
+                    page = requests.get(url)
+                    tree = html.fromstring(page.content)
+                    file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+                except:
+                    continue  #oof
+    
 
         try:
             total_size += Decimal(file_size)
