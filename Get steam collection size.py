@@ -64,11 +64,11 @@ for i in range(0, len(input_url)-1):
         x += 1
     
     sizes.append(total_size)
-    print("\nTotal = " + format(total_size) + " MB")
+    print("\nTotal = " + '{:,}'.format(total_size) + " MB")
     print("\n\n\n\n\n\n\n\n\n")
 
 print("Collection sizes in written order:\n" + "\n".join(sizes))
-print("Total size of all collections: " + str(sum(sizes)))
+print("Total size of all collections: " + '{:,}'.format((sum(sizes))))
 
 while True:
     x = input("Paused")
