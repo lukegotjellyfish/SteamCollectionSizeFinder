@@ -85,7 +85,7 @@ for i in range(0, len(input_url)):
     print("\n\n\n\n\n\n\n\n\n")
 
 print("Collection sizes in written order:\n" + str(sizes).strip())
-print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))))
+print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
 
 while True:
     x = input("Paused")
