@@ -53,7 +53,11 @@ for i in range(0, len(input_url)-1):
         tree = html.fromstring(page.content)
         file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
         file_size = (file_size[0])[:-3].replace(",", "")
-        total_size += Decimal(file_size)
+
+        try:
+            total_size += Decimal(file_size)
+        except:
+            continue
         
         if x < 10:
             print(" " + spacer + str(x) + "| Running total = " + str(total_size))
