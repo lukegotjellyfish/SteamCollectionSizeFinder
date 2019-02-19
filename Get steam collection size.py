@@ -11,7 +11,7 @@ with open("Collections.txt") as url_file:
     for line in url_file:
         input_url.append(line)
 
-for i in range(0, len(input_url)-1):
+for i in range(0, len(input_url)):
     req = Request(input_url[i])
     html_page = urlopen(req)
     soup = BeautifulSoup(html_page, "lxml")
@@ -84,7 +84,7 @@ for i in range(0, len(input_url)-1):
     print("\nTotal = " + '{:,}'.format(total_size) + " MB")
     print("\n\n\n\n\n\n\n\n\n")
 
-print("Collection sizes in written order:\n" + "\n".join(sizes))
+print("Collection sizes in written order:\n" + str(sizes))
 print("Total size of all collections: " + '{:,}'.format((sum(sizes))))
 
 while True:
