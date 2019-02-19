@@ -65,7 +65,7 @@ def add_another(input_url):
             total_size += Decimal(file_size)
         except:
             if file_size == "Unique Visit":
-                input_url.append(file_size)  # this is a collection on the collection
+                total_size += add_another(url)  # this is a collection on the collection
                 continue
 
         if x < 10:
