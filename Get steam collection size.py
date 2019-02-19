@@ -82,7 +82,7 @@ def add_another(input_url):
         else:
             print(str(x) + "| Running total = " + str(total_size))
         x += 1
-    
+    print()
     return total_size
 
 
