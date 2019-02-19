@@ -15,24 +15,27 @@ def add_another(input_url):
         links.append(str(link.get('href')))
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
-    print("Addon Count: " + str(len(links)/2))
-
+    print("\nCollection Addon Count: " + str(len(links)/2)[:-2])
+    links = list(dict.fromkeys(links))
 
     #go through each mod in collection to get filesize
     x = 1
     link_bank = []
     total_size = 0
 
-    if (len(links) > 100):
-        spacer = " "  #Make the output look more... a e s t h e t i c
+    if (len(links) >= 100):
+        spacer = "  "  #Make the output look more... a e s t h e t i c
+    elif (len(links)) >= 10:
+        spacer = " "
     else:
-        spacer = "" 
+        spacer = ""
 
     for i in links:
         url = i
 
         try:
             if link_bank.index(url):
+                print("Duplicate link: " + str(url))
                 continue  #ignore duplicate link (if this somehow happens, just in case)
 
         except:
@@ -56,6 +59,7 @@ def add_another(input_url):
                 except:
                     continue  #oof
     
+
 
         try:
             total_size += Decimal(file_size)
@@ -99,7 +103,8 @@ for i in range(0, len(input_url)):
         links.append(str(link.get('href')))
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
-    print("Addon Count: " + str(len(links)/2))
+    print("Addon Count: " + str(len(links)/2)[:-2])
+    links = list(dict.fromkeys(links))
 
 
     #go through each mod in collection to get filesize
@@ -107,10 +112,12 @@ for i in range(0, len(input_url)):
     link_bank = []
     total_size = 0
 
-    if (len(links) > 100):
-        spacer = " "  #Make the output look more... a e s t h e t i c
+    if (len(links) >= 100):
+        spacer = "  "  #Make the output look more... a e s t h e t i c
+    elif (len(links)) >= 10:
+        spacer = " "
     else:
-        spacer = "" 
+        spacer = ""
 
     for i in links:
         url = i
@@ -148,7 +155,7 @@ for i in range(0, len(input_url)):
                 total_size += add_another(url)
 
         if x < 10:
-            print(" " + spacer + str(x) + "| Running total = " + str(total_size))
+            print(spacer + str(x) + "| Running total = " + str(total_size))
         elif x < 100:
             print(spacer + str(x) + "| Running total = " + str(total_size))
         else:
@@ -159,7 +166,10 @@ for i in range(0, len(input_url)):
     print("\nTotal = " + '{:,}'.format(total_size) + " MB")
     print("\n\n\n\n\n\n\n\n\n")
 
-print("Collection sizes in written order:\n" + str(sizes).strip())
+print("Collection sizes in written order:\n")
+for x in sizes:
+    print(x)
+
 print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
 
 while True:
