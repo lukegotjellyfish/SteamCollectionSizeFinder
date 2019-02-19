@@ -5,7 +5,11 @@ from lxml import html
 import requests
 import fnmatch
 
+global addon_count
+addon_count = 0
+
 def add_another(input_url):
+    global addon_count
     addon_count -= 1
     req = Request(input_url)
     html_page = urlopen(req)
@@ -94,9 +98,6 @@ def add_another(input_url):
 
 
 
-global addon_count
-addon_count = 0
-
 sizes = []
 input_url = []
 with open("Collections.txt") as url_file:
@@ -182,6 +183,6 @@ for x in sizes:
     print(x)
 
 print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
-
+print("\nTotal number of addons: " + str(addon_count))
 while True:
     x = input("Paused")
