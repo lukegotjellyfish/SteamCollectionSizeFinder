@@ -33,11 +33,11 @@ def add_another(input_url, addon_count, mode, spacer):
             print(spacer + "     ===On sub-collection===")
 
         if len_links >= 100:
-            log = spacer + "     Collection Item Count: " + str(len_links)
+            log = spacer + "   Collection Item Count: " + str(len_links)
             print(log)
             log_append.write(log + "\n")
         elif len_links >= 10:
-            log = spacer + "     Collection Item Count: " + str(len_links)
+            log = spacer + "    Collection Item Count: " + str(len_links)
             print(log)
             log_append.write(log + "\n")
         else:
