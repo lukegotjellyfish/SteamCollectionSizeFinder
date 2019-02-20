@@ -97,11 +97,11 @@ def add_another(input_url, addon_count, mode, spacer):
                     continue
 
             if x < 10:
-                log = " " + spacer + str(x) + "| Running total = " + str(total_size)
+                log = "  " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
                 log_append.write(log + "\n")
             elif x < 100:
-                log = spacer + str(x) + "| Running total = " + str(total_size)
+                log = " " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
                 log_append.write(log + "\n")
             else:
