@@ -9,6 +9,7 @@ global addon_count
 addon_count = 0
 
 def add_another(input_url, addon_count):
+    print("\n===On sub-collection===")
     req = Request(input_url)
     html_page = urlopen(req)
     soup = BeautifulSoup(html_page, "lxml")
@@ -24,16 +25,18 @@ def add_another(input_url, addon_count):
 
     len_links = len(links)
     if len_links >= 100:
-        spacer = "    "  #Make the output look more... a e s t h e t i c
+        spacer = "      "  #Make the output look more... a e s t h e t i c
+    elif len_links >= 10:
+        spacer = "     "
     else:
-        spacer = "   "
+        spacer = "    "
 
     if len_links >= 100:
-        print("\n   Collection Item Count: " + str(len_links))
+        print("     Collection Item Count: " + str(len_links))
     elif len_links >= 10:
-        print("\n  Collection Item Count: " + str(len_links))
+        print("    Collection Item Count: " + str(len_links))
     else:
-        print("\n Collection Item Count: " + str(len_links))
+        print("   Collection Item Count: " + str(len_links))
 
 
         
@@ -77,7 +80,9 @@ def add_another(input_url, addon_count):
             total_size += Decimal(file_size)
         except:
             if file_size == "Unique Visit":
-                total_size += add_another(url)  # this is a collection on the collection
+                details = add_another(url, addon_count)
+                total_size += details[0]
+                addon_count = details[1]
                 continue
 
         if x < 10:
@@ -88,7 +93,7 @@ def add_another(input_url, addon_count):
             print(str(x) + "| Running total = " + str(total_size))
         x += 1
     print()
-    return [total_size, addon_count]
+    return [total_size, addon_count - 1]  #-1 to de-count each collection
 
 
 
@@ -164,12 +169,11 @@ for i in range(0, len(input_url)):
             total_size += Decimal(file_size)
         except:
             if file_size == "Unique Visit":
-
                 details = add_another(url, addon_count)
                 total_size += details[0]
                 addon_count = details[1]
                 continue
-            
+
         if x < 10:
             print(" " + spacer + str(x) + "| Running total = " + str(total_size))
         elif x < 100:
