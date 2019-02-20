@@ -22,11 +22,9 @@ def add_another(input_url, addon_count, mode, spacer):
 
         len_links = len(links)
         if len_links >= 100:
-            spacer = "       "  #Make the output look more... a e s t h e t i c
-        #elif len_links >= 10:
-        #    spacer = "      "
+            spacer = " "  #Make the output look more... a e s t h e t i c
         else:
-            spacer = "     "
+            spacer = ""
 
         if mode == 2:
             spacer += "    "
@@ -97,15 +95,15 @@ def add_another(input_url, addon_count, mode, spacer):
                     continue
 
             if x < 10:
-                log = "  " + spacer + str(x) + "| Running total = " + str(total_size)
+                log = "     " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
                 log_append.write(log + "\n")
             elif x < 100:
-                log = " " + spacer + str(x) + "| Running total = " + str(total_size)
+                log = "     " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
                 log_append.write(log + "\n")
             else:
-                log = spacer + str(x) + "| Running total = " + str(total_size)
+                log = "     " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
                 log_append.write(log + "\n")
 
