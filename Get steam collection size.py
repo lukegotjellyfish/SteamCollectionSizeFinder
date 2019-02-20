@@ -4,13 +4,9 @@ from decimal import Decimal
 from lxml import html
 import requests
 import fnmatch
-import io
-
-global addon_count
-addon_count = 0
 
 def add_another(input_url, addon_count, mode, spacer):
-    with io.open("log.txt", "a", encoding='utf8') as log_append:
+    with open("log.txt", "a", encoding='utf8') as log_append:
         req = Request(input_url)
         html_page = urlopen(req)
         soup = BeautifulSoup(html_page, "lxml")
@@ -125,10 +121,11 @@ def add_another(input_url, addon_count, mode, spacer):
 
 sizes = []
 input_url = []
-with io.open("Collections.txt", "r", encoding='utf8') as url_file:
+addon_count = 0
+with open("Collections.txt", "r", encoding='utf8') as url_file:
     for line in url_file:
         input_url.append(line)
-with io.open("log.txt", "w", encoding='utf8') as log_write:
+with open("log.txt", "w", encoding='utf8') as log_write:
     for i in range(0, len(input_url)):
         req = Request(input_url[i])
         html_page = urlopen(req)
