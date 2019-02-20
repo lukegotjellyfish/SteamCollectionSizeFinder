@@ -31,11 +31,11 @@ def add_another(input_url):
         spacer = "   "
 
     if len_links >= 100:
-        print("\n   Collection Addon Count: " + str(len_links))
+        print("\n   Collection Item Count: " + str(len_links))
     elif len_links >= 10:
-        print("\n  Collection Addon Count: " + str(len_links))
+        print("\n  Collection Item Count: " + str(len_links))
     else:
-        print("\n Collection Addon Count: " + str(len_links))
+        print("\n Collection Item Count: " + str(len_links))
 
 
         
@@ -116,14 +116,14 @@ for i in range(0, len(input_url)):
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
     links = list(dict.fromkeys(links))
-    addon_count += len(links)
-
-    if (len(links) >= 100):
-        spacer = " "  #Make the output look more... a e s t h e t i c
+    len_links = len(links)
+    
+    if len_links >= 100:
+        spacer = ""  #Make the output look more... a e s t h e t i c
     else:
-        spacer = ""
+        spacer = " "
 
-    print("\n" + spacer + "Collection Addon Count: " + str(len(links)))
+    print("\nCollection Item Count: " + str(len_links))
 
 
 
@@ -181,10 +181,11 @@ for i in range(0, len(input_url)):
     total_size = 0
 
 print("Collection sizes in written order:\n")
-for x in sizes:
-    print(x)
+with open("log.txt", "w") as f:
+    for x in sizes:
+        f.write(x + "\n")
+        print(x)
 
 print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
 print("\nTotal number of addons: " + str(addon_count))
-while True:
-    x = input("Paused")
+x = input("Press ENTER to EXIT")
