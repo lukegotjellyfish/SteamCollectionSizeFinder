@@ -33,9 +33,9 @@ def add_another(input_url, addon_count, mode, spacer):
 
         if mode == 2:
             spacer += "    "
-
-        print(spacer + "===On sub-sub-collection===")
-
+            print(spacer + "===On sub-sub-collection===")
+        else:
+            print(spacer + "===On sub-collection===")
 
         if len_links >= 100:
             log = spacer + "Collection Item Count: " + str(len_links)
