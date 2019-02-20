@@ -216,8 +216,10 @@ with open("log.txt", "w", encoding='utf8') as log_write:
         total_size = 0
 
 print("Collection sizes in written order:\n")
+num = 0
 for x in sizes:
-    print('{:,}'.format(x))
+    print(str(num) + ": " + '{:,}'.format(x))
+    num += 1
 
 print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
 print("\nTotal number of addons: " + str(addon_count))
