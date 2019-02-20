@@ -9,6 +9,8 @@ global addon_count
 addon_count = 0
 
 def add_another(input_url):
+    global addon_count
+    addon_count -= 1
     req = Request(input_url)
     html_page = urlopen(req)
     soup = BeautifulSoup(html_page, "lxml")
@@ -19,7 +21,7 @@ def add_another(input_url):
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
     links = list(dict.fromkeys(links))
-    global addon_count
+
     addon_count += len(links)
 
     len_links = len(links)
@@ -174,8 +176,9 @@ for i in range(0, len(input_url)):
         x += 1
     
     sizes.append(total_size)
-    print("\nTotal = " + '{:,}'.format(total_size) + " MB")
+    print("\nTotal for this collection = " + '{:,}'.format(total_size) + " MB")
     print("\n\n\n\n\n\n\n\n\n")
+    total_size = 0
 
 print("Collection sizes in written order:\n")
 for x in sizes:
