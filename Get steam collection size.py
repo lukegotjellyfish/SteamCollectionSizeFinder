@@ -9,7 +9,6 @@ global addon_count
 addon_count = 0
 
 def add_another(input_url):
-    global addon_count
     addon_count -= 1
     req = Request(input_url)
     html_page = urlopen(req)
