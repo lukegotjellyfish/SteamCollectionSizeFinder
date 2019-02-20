@@ -8,8 +8,7 @@ import fnmatch
 global addon_count
 addon_count = 0
 
-def add_another(input_url):
-    addon_count -= 1
+def add_another(input_url, addon_count):
     req = Request(input_url)
     html_page = urlopen(req)
     soup = BeautifulSoup(html_page, "lxml")
@@ -89,7 +88,7 @@ def add_another(input_url):
             print(str(x) + "| Running total = " + str(total_size))
         x += 1
     print()
-    return total_size
+    return [total_size, addon_count]
 
 
 
@@ -116,6 +115,7 @@ for i in range(0, len(input_url)):
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
     links = list(dict.fromkeys(links))
     len_links = len(links)
+    addon_count += len_links
     
     if len_links >= 100:
         spacer = ""  #Make the output look more... a e s t h e t i c
@@ -164,8 +164,12 @@ for i in range(0, len(input_url)):
             total_size += Decimal(file_size)
         except:
             if file_size == "Unique Visit":
-                total_size += add_another(url)
 
+                details = add_another(url, addon_count)
+                total_size += details[0]
+                addon_count += details[1]
+                continue
+            
         if x < 10:
             print(" " + spacer + str(x) + "| Running total = " + str(total_size))
         elif x < 100:
