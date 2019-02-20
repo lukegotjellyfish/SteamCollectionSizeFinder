@@ -146,7 +146,7 @@ with open("log.txt", "w", encoding='utf8') as log_write:
             spacer = ""
 
 
-        log = "\nCollection Item Count: " + str(len_links)
+        log = "Collection Item Count: " + str(len_links)
         print(log)
         log_write.write(log + "\n")
 
