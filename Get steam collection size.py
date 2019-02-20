@@ -8,9 +8,8 @@ import fnmatch
 global addon_count
 addon_count = 0
 
-def add_another(input_url, addon_count, mode):
-    with open("log.txt", "a") as log_append:
-        print("===On sub-collection===")
+def add_another(input_url, addon_count, mode, spacer):
+    with open("log.txt", "a") as log_append:   
         req = Request(input_url)
         html_page = urlopen(req)
         soup = BeautifulSoup(html_page, "lxml")
@@ -26,27 +25,30 @@ def add_another(input_url, addon_count, mode):
 
         len_links = len(links)
         if len_links >= 100:
-            spacer = "      "  #Make the output look more... a e s t h e t i c
+            spacer = "       "  #Make the output look more... a e s t h e t i c
         elif len_links >= 10:
-            spacer = "     "
+            spacer = "      "
         else:
-            spacer = "    "
+            spacer = "     "
 
         if mode == 2:
-            spacer += "       "
+            spacer += "    "
+
+        print(spacer + "===On sub-sub-collection===")
+
 
         if len_links >= 100:
-            log = "     Collection Item Count: " + str(len_links)
+            log = spacer + "Collection Item Count: " + str(len_links)
             print(log)
-            log_append.write(log)
+            log_append.write(log + "\n")
         elif len_links >= 10:
-            log = "    Collection Item Count: " + str(len_links)
+            log = spacer + "Collection Item Count: " + str(len_links)
             print(log)
-            log_append.write(log)
+            log_append.write(log + "\n")
         else:
-            log = "   Collection Item Count: " + str(len_links)
+            log = spacer + "Collection Item Count: " + str(len_links)
             print(log)
-            log_append.write(log)
+            log_append.writ(log + "\n")
 
 
             
@@ -62,7 +64,7 @@ def add_another(input_url, addon_count, mode):
                 if link_bank.index(url):
                     log = "Duplicate link: " + str(url)
                     print(log)
-                    log_append.write(log)
+                    log_append.writ(log + "\n")
                     continue  #ignore duplicate link (if this somehow happens, just in case)
 
             except:
@@ -92,23 +94,23 @@ def add_another(input_url, addon_count, mode):
                 total_size += Decimal(file_size)
             except:
                 if file_size == "Unique Visit":
-                    details = add_another(url, addon_count, 2)
+                    details = add_another(url, addon_count, 2, spacer)
                     total_size += details[0]
                     addon_count = details[1]
                     continue
 
             if x < 10:
+                log = "  " + spacer + str(x) + "| Running total = " + str(total_size)
+                print(log)
+                log_append.writ(log + "\n")
+            elif x < 100:
                 log = " " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_append.write(log)
-            elif x < 100:
+                log_append.writ(log + "\n")
+            else:
                 log = spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_append.write(log)
-            else:
-                log = str(x) + "| Running total = " + str(total_size)
-                print(log)
-                log_append.write(log)
+                log_append.writ(log + "\n")
             x += 1
         return [total_size, addon_count - 1]  #-1 to de-count each collection
 
@@ -140,7 +142,7 @@ with open("log.txt", "w") as log_write:
         addon_count += len_links
         
         if len_links >= 100:
-            spacer = ""  #Make the output look more... a e s t h e t i c
+            spacer = "  "  #Make the output look more... a e s t h e t i c
         else:
             spacer = " "
 
@@ -188,7 +190,7 @@ with open("log.txt", "w") as log_write:
                 total_size += Decimal(file_size)
             except:
                 if file_size == "Unique Visit":
-                    details = add_another(url, addon_count, 1)
+                    details = add_another(url, addon_count, 1, spacer)
                     total_size += details[0]
                     addon_count = details[1]
                     continue
@@ -196,22 +198,22 @@ with open("log.txt", "w") as log_write:
             if x < 10:
                 log = " " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_write.write(log)
+                log_write.writ(log + "\n")
             elif x < 100:
                 log = spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_write.write(log)
+                log_write.writ(log + "\n")
             else:
                 log = str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_write.write(log)
+                log_write.writ(log + "\n")
 
             x += 1
         
         sizes.append(total_size)
         log = "\nTotal for this collection = " + '{:,}'.format(total_size) + " MB\n|\n|\n|\n|\n|\n|\n|\n|\n"
         print(log)
-        log_write.write(log)
+        log_write.writ(log + "\n")
         total_size = 0
 
 print("Collection sizes in written order:\n")
