@@ -209,8 +209,8 @@ with open("log.txt", "w", encoding='utf8') as log_write:
 
             x += 1
 
-        sizes.append(total_size)
-        log = "\nTotal for this collection = " + '{:,}'.format(total_size) + " MB\n\n╔═══════════════╗\n║Next Collection║\n╚═══════════════╝\n"
+        sizes.append(total_size)                                                                            
+        log = "\nTotal for this collection = " + '{:,}'.format(total_size) + " MB\n\n╔══════════════╗\n║   Finished   ║\n╚══════════════╝\n"
         print(log)
         log_write.write(log + "\n")
         total_size = 0
