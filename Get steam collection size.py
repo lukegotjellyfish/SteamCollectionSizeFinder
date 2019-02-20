@@ -28,20 +28,20 @@ def add_another(input_url, addon_count, mode, spacer):
 
         if mode == 2:
             spacer += "    "
-            print(spacer + "===On sub-sub-collection===")
+            print(spacer + "     ===On sub-sub-collection===")
         else:
-            print(spacer + "===On sub-collection===")
+            print(spacer + "     ===On sub-collection===")
 
         if len_links >= 100:
-            log = spacer + "Collection Item Count: " + str(len_links)
+            log = spacer + "     Collection Item Count: " + str(len_links)
             print(log)
             log_append.write(log + "\n")
         elif len_links >= 10:
-            log = spacer + "Collection Item Count: " + str(len_links)
+            log = spacer + "     Collection Item Count: " + str(len_links)
             print(log)
             log_append.write(log + "\n")
         else:
-            log = spacer + "Collection Item Count: " + str(len_links)
+            log = spacer + "     Collection Item Count: " + str(len_links)
             print(log)
             log_append.write(log + "\n")
 
@@ -57,7 +57,7 @@ def add_another(input_url, addon_count, mode, spacer):
 
             try:
                 if link_bank.index(url):
-                    log = "Duplicate link: " + str(url)
+                    log = "     Duplicate link: " + str(url)
                     print(log)
                     log_append.write(log + "\n")
                     continue  #ignore duplicate link (if this somehow happens, just in case)
@@ -194,17 +194,13 @@ with open("log.txt", "w", encoding='utf8') as log_write:
 
             if x < 10:
                 log = " " + spacer + str(x) + "| Running total = " + str(total_size)
-                print(log)
-                log_write.write(log + "\n")
             elif x < 100:
                 log = spacer + str(x) + "| Running total = " + str(total_size)
-                print(log)
-                log_write.write(log + "\n")
             else:
                 log = str(x) + "| Running total = " + str(total_size)
-                print(log)
-                log_write.write(log + "\n")
 
+            print(log)
+            log_write.write(log + "\n")
             x += 1
 
         sizes.append(total_size)                                                                            
