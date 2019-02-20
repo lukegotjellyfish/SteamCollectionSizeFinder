@@ -23,8 +23,8 @@ def add_another(input_url, addon_count, mode, spacer):
         len_links = len(links)
         if len_links >= 100:
             spacer = "       "  #Make the output look more... a e s t h e t i c
-        elif len_links >= 10:
-            spacer = "      "
+        #elif len_links >= 10:
+        #    spacer = "      "
         else:
             spacer = "     "
 
