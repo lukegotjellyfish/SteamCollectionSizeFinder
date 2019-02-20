@@ -48,7 +48,7 @@ def add_another(input_url, addon_count, mode, spacer):
         else:
             log = spacer + "Collection Item Count: " + str(len_links)
             print(log)
-            log_append.writ(log + "\n")
+            log_append.write(log + "\n")
 
 
             
@@ -64,7 +64,7 @@ def add_another(input_url, addon_count, mode, spacer):
                 if link_bank.index(url):
                     log = "Duplicate link: " + str(url)
                     print(log)
-                    log_append.writ(log + "\n")
+                    log_append.write(log + "\n")
                     continue  #ignore duplicate link (if this somehow happens, just in case)
 
             except:
@@ -102,15 +102,15 @@ def add_another(input_url, addon_count, mode, spacer):
             if x < 10:
                 log = "  " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_append.writ(log + "\n")
+                log_append.write(log + "\n")
             elif x < 100:
                 log = " " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_append.writ(log + "\n")
+                log_append.write(log + "\n")
             else:
                 log = spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_append.writ(log + "\n")
+                log_append.write(log + "\n")
             x += 1
         return [total_size, addon_count - 1]  #-1 to de-count each collection
 
@@ -198,22 +198,22 @@ with open("log.txt", "w") as log_write:
             if x < 10:
                 log = " " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_write.writ(log + "\n")
+                log_write.write(log + "\n")
             elif x < 100:
                 log = spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_write.writ(log + "\n")
+                log_write.write(log + "\n")
             else:
                 log = str(x) + "| Running total = " + str(total_size)
                 print(log)
-                log_write.writ(log + "\n")
+                log_write.write(log + "\n")
 
             x += 1
         
         sizes.append(total_size)
         log = "\nTotal for this collection = " + '{:,}'.format(total_size) + " MB\n|\n|\n|\n|\n|\n|\n|\n|\n"
         print(log)
-        log_write.writ(log + "\n")
+        log_write.write(log + "\n")
         total_size = 0
 
 print("Collection sizes in written order:\n")
