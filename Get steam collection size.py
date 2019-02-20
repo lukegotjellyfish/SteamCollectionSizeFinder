@@ -4,12 +4,13 @@ from decimal import Decimal
 from lxml import html
 import requests
 import fnmatch
+import io
 
 global addon_count
 addon_count = 0
 
 def add_another(input_url, addon_count, mode, spacer):
-    with open("log.txt", "a") as log_append:   
+    with io.open("log.txt", "a", encoding='utf8') as log_append:
         req = Request(input_url)
         html_page = urlopen(req)
         soup = BeautifulSoup(html_page, "lxml")
@@ -17,7 +18,7 @@ def add_another(input_url, addon_count, mode, spacer):
         links = []
         for link in soup.findAll('a', class_=False, href=True, target=False):  #get links and filter out unwanted class and target html
             links.append(str(link.get('href')))
-            
+
         links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
         links = list(dict.fromkeys(links))
 
@@ -51,7 +52,7 @@ def add_another(input_url, addon_count, mode, spacer):
             log_append.write(log + "\n")
 
 
-            
+
         #go through each mod in collection to get filesize
         x = 1
         link_bank = []
@@ -87,7 +88,7 @@ def add_another(input_url, addon_count, mode, spacer):
                         file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
                     except:
                         continue  #oof
-        
+
 
 
             try:
@@ -100,33 +101,34 @@ def add_another(input_url, addon_count, mode, spacer):
                     continue
 
             if x < 10:
-                log = "  " + spacer + str(x) + "| Running total = " + str(total_size)
+                log = " " + spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
                 log_append.write(log + "\n")
             elif x < 100:
-                log = " " + spacer + str(x) + "| Running total = " + str(total_size)
+                log = spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
                 log_append.write(log + "\n")
             else:
                 log = spacer + str(x) + "| Running total = " + str(total_size)
                 print(log)
                 log_append.write(log + "\n")
+
             x += 1
         return [total_size, addon_count - 1]  #-1 to de-count each collection
 
 
 
 
-    
+
 
 
 
 sizes = []
 input_url = []
-with open("Collections.txt") as url_file:
+with io.open("Collections.txt", "r", encoding='utf8') as url_file:
     for line in url_file:
         input_url.append(line)
-with open("log.txt", "w") as log_write:
+with io.open("log.txt", "w", encoding='utf8') as log_write:
     for i in range(0, len(input_url)):
         req = Request(input_url[i])
         html_page = urlopen(req)
@@ -135,22 +137,22 @@ with open("log.txt", "w") as log_write:
         links = []
         for link in soup.findAll('a', class_=False, href=True, target=False):  #get links and filter out unwanted class and target html
             links.append(str(link.get('href')))
-            
+
         links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
         links = list(dict.fromkeys(links))
         len_links = len(links)
         addon_count += len_links
-        
-        if len_links >= 100:
-            spacer = "  "  #Make the output look more... a e s t h e t i c
-        else:
-            spacer = " "
 
-        
+        if len_links >= 100:
+            spacer = " "  #Make the output look more... a e s t h e t i c
+        else:
+            spacer = ""
+
+
         log = "\nCollection Item Count: " + str(len_links)
         print(log)
         log_write.write(log + "\n")
-        
+
 
         #go through each mod in collection to get filesize
         x = 1
@@ -184,7 +186,7 @@ with open("log.txt", "w") as log_write:
                         file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
                     except:
                         continue  #oof
-        
+
 
             try:
                 total_size += Decimal(file_size)
@@ -209,9 +211,9 @@ with open("log.txt", "w") as log_write:
                 log_write.write(log + "\n")
 
             x += 1
-        
+
         sizes.append(total_size)
-        log = "\nTotal for this collection = " + '{:,}'.format(total_size) + " MB\n|\n|\n|\n|\n|\n|\n|\n|\n"
+        log = "\nTotal for this collection = " + '{:,}'.format(total_size) + " MB\n\n╔═══════════════╗\n║Next Collection║\n╚═══════════════╝\n"
         print(log)
         log_write.write(log + "\n")
         total_size = 0
