@@ -183,7 +183,7 @@ for i in range(0, len(input_url)):
 print("Collection sizes in written order:\n")
 with open("log.txt", "w") as f:
     for x in sizes:
-        f.write(x + "\n")
+        f.write(str(x) + "\n")
         print(x)
 
 print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
