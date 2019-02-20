@@ -167,7 +167,7 @@ for i in range(0, len(input_url)):
 
                 details = add_another(url, addon_count)
                 total_size += details[0]
-                addon_count += details[1]
+                addon_count = details[1]
                 continue
             
         if x < 10:
