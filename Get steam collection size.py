@@ -8,92 +8,109 @@ import fnmatch
 global addon_count
 addon_count = 0
 
-def add_another(input_url, addon_count):
-    print("\n===On sub-collection===")
-    req = Request(input_url)
-    html_page = urlopen(req)
-    soup = BeautifulSoup(html_page, "lxml")
+def add_another(input_url, addon_count, mode):
+    with open("log.txt", "a") as log_append:
+        print("===On sub-collection===")
+        req = Request(input_url)
+        html_page = urlopen(req)
+        soup = BeautifulSoup(html_page, "lxml")
 
-    links = []
-    for link in soup.findAll('a', class_=False, href=True, target=False):  #get links and filter out unwanted class and target html
-        links.append(str(link.get('href')))
-        
-    links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
-    links = list(dict.fromkeys(links))
+        links = []
+        for link in soup.findAll('a', class_=False, href=True, target=False):  #get links and filter out unwanted class and target html
+            links.append(str(link.get('href')))
+            
+        links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
+        links = list(dict.fromkeys(links))
 
-    addon_count += len(links)
+        addon_count += len(links)
 
-    len_links = len(links)
-    if len_links >= 100:
-        spacer = "      "  #Make the output look more... a e s t h e t i c
-    elif len_links >= 10:
-        spacer = "     "
-    else:
-        spacer = "    "
+        len_links = len(links)
+        if len_links >= 100:
+            spacer = "      "  #Make the output look more... a e s t h e t i c
+        elif len_links >= 10:
+            spacer = "     "
+        else:
+            spacer = "    "
 
-    if len_links >= 100:
-        print("     Collection Item Count: " + str(len_links))
-    elif len_links >= 10:
-        print("    Collection Item Count: " + str(len_links))
-    else:
-        print("   Collection Item Count: " + str(len_links))
+        if mode == 2:
+            spacer += "       "
+
+        if len_links >= 100:
+            log = "     Collection Item Count: " + str(len_links)
+            print(log)
+            log_append.write(log)
+        elif len_links >= 10:
+            log = "    Collection Item Count: " + str(len_links)
+            print(log)
+            log_append.write(log)
+        else:
+            log = "   Collection Item Count: " + str(len_links)
+            print(log)
+            log_append.write(log)
 
 
-        
-    #go through each mod in collection to get filesize
-    x = 1
-    link_bank = []
-    total_size = 0
+            
+        #go through each mod in collection to get filesize
+        x = 1
+        link_bank = []
+        total_size = 0
 
-    for i in links:
-        url = i
+        for i in links:
+            url = i
 
-        try:
-            if link_bank.index(url):
-                print("Duplicate link: " + str(url))
-                continue  #ignore duplicate link (if this somehow happens, just in case)
+            try:
+                if link_bank.index(url):
+                    log = "Duplicate link: " + str(url)
+                    print(log)
+                    log_append.write(log)
+                    continue  #ignore duplicate link (if this somehow happens, just in case)
 
-        except:
-            link_bank.append(str(i))  #add to list of unique links
-            #at least it works
-        try:
-            page = requests.get(url)
-            tree = html.fromstring(page.content)
-            file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
-            file_size = (file_size[0])[:-3].replace(",", "")
-        except:
+            except:
+                link_bank.append(str(i))  #add to list of unique links
+                #at least it works
             try:
                 page = requests.get(url)
                 tree = html.fromstring(page.content)
                 file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+                file_size = (file_size[0])[:-3].replace(",", "")
             except:
                 try:
                     page = requests.get(url)
                     tree = html.fromstring(page.content)
                     file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
                 except:
-                    continue  #oof
-    
+                    try:
+                        page = requests.get(url)
+                        tree = html.fromstring(page.content)
+                        file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+                    except:
+                        continue  #oof
+        
 
 
-        try:
-            total_size += Decimal(file_size)
-        except:
-            if file_size == "Unique Visit":
-                details = add_another(url, addon_count)
-                total_size += details[0]
-                addon_count = details[1]
-                continue
+            try:
+                total_size += Decimal(file_size)
+            except:
+                if file_size == "Unique Visit":
+                    details = add_another(url, addon_count, 2)
+                    total_size += details[0]
+                    addon_count = details[1]
+                    continue
 
-        if x < 10:
-            print(" " + spacer + str(x) + "| Running total = " + str(total_size))
-        elif x < 100:
-            print(spacer + str(x) + "| Running total = " + str(total_size))
-        else:
-            print(str(x) + "| Running total = " + str(total_size))
-        x += 1
-    print()
-    return [total_size, addon_count - 1]  #-1 to de-count each collection
+            if x < 10:
+                log = " " + spacer + str(x) + "| Running total = " + str(total_size)
+                print(log)
+                log_append.write(log)
+            elif x < 100:
+                log = spacer + str(x) + "| Running total = " + str(total_size)
+                print(log)
+                log_append.write(log)
+            else:
+                log = str(x) + "| Running total = " + str(total_size)
+                print(log)
+                log_append.write(log)
+            x += 1
+        return [total_size, addon_count - 1]  #-1 to de-count each collection
 
 
 
@@ -107,91 +124,99 @@ input_url = []
 with open("Collections.txt") as url_file:
     for line in url_file:
         input_url.append(line)
+with open("log.txt", "w") as log_write:
+    for i in range(0, len(input_url)):
+        req = Request(input_url[i])
+        html_page = urlopen(req)
+        soup = BeautifulSoup(html_page, "lxml")
 
-for i in range(0, len(input_url)):
-    req = Request(input_url[i])
-    html_page = urlopen(req)
-    soup = BeautifulSoup(html_page, "lxml")
-
-    links = []
-    for link in soup.findAll('a', class_=False, href=True, target=False):  #get links and filter out unwanted class and target html
-        links.append(str(link.get('href')))
+        links = []
+        for link in soup.findAll('a', class_=False, href=True, target=False):  #get links and filter out unwanted class and target html
+            links.append(str(link.get('href')))
+            
+        links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
+        links = list(dict.fromkeys(links))
+        len_links = len(links)
+        addon_count += len_links
         
-    links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
-    links = list(dict.fromkeys(links))
-    len_links = len(links)
-    addon_count += len_links
-    
-    if len_links >= 100:
-        spacer = ""  #Make the output look more... a e s t h e t i c
-    else:
-        spacer = " "
+        if len_links >= 100:
+            spacer = ""  #Make the output look more... a e s t h e t i c
+        else:
+            spacer = " "
 
-    print("\nCollection Item Count: " + str(len_links))
+        
+        log = "\nCollection Item Count: " + str(len_links)
+        print(log)
+        log_write.write(log + "\n")
+        
 
+        #go through each mod in collection to get filesize
+        x = 1
+        link_bank = []
+        total_size = 0
 
+        for i in links:
+            url = i
 
-    #go through each mod in collection to get filesize
-    x = 1
-    link_bank = []
-    total_size = 0
+            try:
+                if link_bank.index(url):
+                    continue  #ignore duplicate link (if this somehow happens, just in case)
 
-    for i in links:
-        url = i
-
-        try:
-            if link_bank.index(url):
-                continue  #ignore duplicate link (if this somehow happens, just in case)
-
-        except:
-            link_bank.append(str(i))  #add to list of unique links
-            #at least it works
-        try:
-            page = requests.get(url)
-            tree = html.fromstring(page.content)
-            file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
-            file_size = (file_size[0])[:-3].replace(",", "")
-        except:
+            except:
+                link_bank.append(str(i))  #add to list of unique links
+                #at least it works
             try:
                 page = requests.get(url)
                 tree = html.fromstring(page.content)
                 file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+                file_size = (file_size[0])[:-3].replace(",", "")
             except:
                 try:
                     page = requests.get(url)
                     tree = html.fromstring(page.content)
                     file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
                 except:
-                    continue  #oof
-    
+                    try:
+                        page = requests.get(url)
+                        tree = html.fromstring(page.content)
+                        file_size = tree.xpath('//div[@class="detailsStatRight"]/text()')
+                    except:
+                        continue  #oof
+        
 
-        try:
-            total_size += Decimal(file_size)
-        except:
-            if file_size == "Unique Visit":
-                details = add_another(url, addon_count)
-                total_size += details[0]
-                addon_count = details[1]
-                continue
+            try:
+                total_size += Decimal(file_size)
+            except:
+                if file_size == "Unique Visit":
+                    details = add_another(url, addon_count, 1)
+                    total_size += details[0]
+                    addon_count = details[1]
+                    continue
 
-        if x < 10:
-            print(" " + spacer + str(x) + "| Running total = " + str(total_size))
-        elif x < 100:
-            print(spacer + str(x) + "| Running total = " + str(total_size))
-        else:
-            print(str(x) + "| Running total = " + str(total_size))
-        x += 1
-    
-    sizes.append(total_size)
-    print("\nTotal for this collection = " + '{:,}'.format(total_size) + " MB")
-    print("\n\n\n\n\n\n\n\n\n")
-    total_size = 0
+            if x < 10:
+                log = " " + spacer + str(x) + "| Running total = " + str(total_size)
+                print(log)
+                log_write.write(log)
+            elif x < 100:
+                log = spacer + str(x) + "| Running total = " + str(total_size)
+                print(log)
+                log_write.write(log)
+            else:
+                log = str(x) + "| Running total = " + str(total_size)
+                print(log)
+                log_write.write(log)
+
+            x += 1
+        
+        sizes.append(total_size)
+        log = "\nTotal for this collection = " + '{:,}'.format(total_size) + " MB\n|\n|\n|\n|\n|\n|\n|\n|\n"
+        print(log)
+        log_write.write(log)
+        total_size = 0
 
 print("Collection sizes in written order:\n")
-with open("log.txt", "w") as f:
-    for x in sizes:
-        f.write(str(x) + "\n")
-        print(x)
+for x in sizes:
+    print(x)
 
 print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
 print("\nTotal number of addons: " + str(addon_count))
