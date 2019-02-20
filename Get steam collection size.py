@@ -9,8 +9,6 @@ global addon_count
 addon_count = 0
 
 def add_another(input_url):
-    global addon_count
-    addon_count -= 1
     req = Request(input_url)
     html_page = urlopen(req)
     soup = BeautifulSoup(html_page, "lxml")
@@ -21,6 +19,7 @@ def add_another(input_url):
         
     links = fnmatch.filter(links, 'https://steamcommunity.com/sharedfiles/filedetails/?id=*')
     links = list(dict.fromkeys(links))
+    global addon_count
     addon_count += len(links)
 
     len_links = len(links)
