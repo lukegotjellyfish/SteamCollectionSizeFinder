@@ -4,9 +4,10 @@ from decimal import Decimal
 from lxml import html
 import requests
 import fnmatch
+from datetime import datetime
 
 def add_another(input_url, addon_count, mode, spacer):
-    with open("log.txt", "a", encoding='utf8') as log_append:
+    with open("log.txt", "a", encoding='utf8') as log_write:
         req = Request(input_url)
         html_page = urlopen(req)
         soup = BeautifulSoup(html_page, "lxml")
@@ -34,17 +35,14 @@ def add_another(input_url, addon_count, mode, spacer):
 
         if len_links >= 100:
             log = spacer + "   Collection Item Count: " + str(len_links)
-            print(log)
-            log_append.write(log + "\n")
         elif len_links >= 10:
             log = spacer + "    Collection Item Count: " + str(len_links)
-            print(log)
-            log_append.write(log + "\n")
         else:
             log = spacer + "     Collection Item Count: " + str(len_links)
-            print(log)
-            log_append.write(log + "\n")
 
+        print(log)
+        i = datetime.now()
+        log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
 
 
         #go through each mod in collection to get filesize
@@ -59,7 +57,8 @@ def add_another(input_url, addon_count, mode, spacer):
                 if link_bank.index(url):
                     log = "     Duplicate link: " + str(url)
                     print(log)
-                    log_append.write(log + "\n")
+                    i = datetime.now()
+                    log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
                     continue  #ignore duplicate link (if this somehow happens, just in case)
 
             except:
@@ -96,16 +95,14 @@ def add_another(input_url, addon_count, mode, spacer):
 
             if x < 10:
                 log = "     " + spacer + str(x) + "| Running total = " + str(total_size)
-                print(log)
-                log_append.write(log + "\n")
             elif x < 100:
                 log = "     " + spacer + str(x) + "| Running total = " + str(total_size)
-                print(log)
-                log_append.write(log + "\n")
             else:
                 log = "     " + spacer + str(x) + "| Running total = " + str(total_size)
-                print(log)
-                log_append.write(log + "\n")
+
+            print(log)
+            i = datetime.now()
+            log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
 
             x += 1
         return [total_size, addon_count - 1]  #-1 to de-count each collection
@@ -146,7 +143,8 @@ with open("log.txt", "w", encoding='utf8') as log_write:
 
         log = "Collection Item Count: " + str(len_links)
         print(log)
-        log_write.write(log + "\n")
+        i = datetime.now()
+        log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
 
 
         #go through each mod in collection to get filesize
@@ -200,21 +198,25 @@ with open("log.txt", "w", encoding='utf8') as log_write:
                 log = str(x) + "| Running total = " + str(total_size)
 
             print(log)
-            log_write.write(log + "\n")
+            i = datetime.now()
+            log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
             x += 1
 
-        sizes.append(total_size)                                                                            
+        sizes.append(total_size)
         log = "\nTotal for this collection = " + '{:,}'.format(total_size) + " MB\n\n╔══════════════╗\n║   Finished   ║\n╚══════════════╝\n"
         print(log)
-        log_write.write(log + "\n")
+        i = datetime.now()
+        log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
         total_size = 0
 
 print("Collection sizes in written order:\n")
 num = 0
 for x in sizes:
-    print(str(num) + ": " + '{:,}'.format(x))
+    print(str(num + 1) + ": " + '{:,}'.format(x))
     num += 1
 
 print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
-print("\nTotal number of addons: " + str(addon_count))
-x = input("Press ENTER to EXIT")
+print("Total number of addons: " + str(addon_count))
+i = datetime.now()
+print("Taken at " + i.strftime('%Y/%m/%d %H:%M:%S'))
+x = input("\n\nPress ENTER to EXIT")
