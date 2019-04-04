@@ -2,9 +2,9 @@ from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from decimal import Decimal
 from lxml import html
+from datetime import datetime
 import requests
 import fnmatch
-from datetime import datetime
 
 def add_another(input_url, addon_count, mode, spacer):
     with open("log.txt", "a", encoding='utf8') as log_write:
