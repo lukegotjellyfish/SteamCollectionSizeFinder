@@ -5,5 +5,6 @@ Requires:
 - urllib
 - decimal
 - lxml
+- datetime
 - requests
 - fnmatch
