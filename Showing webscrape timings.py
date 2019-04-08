@@ -7,17 +7,17 @@ import time
 import numpy as np
 
 
-
 def timestart():
     global start
     start = time.time()
+	
+
 def timeend():
     global end
     end = time.time()
     TimeTaken = (end-start)  # This gets the seconds passed
     TimeTaken = round(TimeTaken, 3)
     return TimeTaken
-
 
 
 time_array_1 = []
