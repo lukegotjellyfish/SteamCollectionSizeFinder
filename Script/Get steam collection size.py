@@ -117,9 +117,11 @@ def add_another(input_url, addon_count, mode, spacer):
 sizes = []
 input_url = []
 addon_count = 0
+
 with open("Collections.txt", "r", encoding='utf8') as url_file:
     for line in url_file:
         input_url.append(line)
+
 with open("log.txt", "w", encoding='utf8') as log_write:
     for i in range(0, len(input_url)):
         req = Request(input_url[i])
