@@ -121,7 +121,7 @@ with open("Collections.txt", "r", encoding='utf8') as url_file:
 print("Collection sizes in written order:\n")
 num = 1
 for x in sizes:
-    print(str(num + 1) + ": " + '{:,}'.format(x) + " MB")
+    print(str(num) + ": " + '{:,}'.format(x) + " MB")
     num += 1
 i = datetime.now()
 
