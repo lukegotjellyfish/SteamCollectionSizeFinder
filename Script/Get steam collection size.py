@@ -8,6 +8,13 @@ import requests
 import fnmatch
 
 
+def write_log(log):
+    print(log)
+    i = datetime.now()
+    with open("log.txt", "a", encoding='utf8') as log_write:
+        log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
+
+
 def add_another(input_url, addon_count, mode, spacer):
     req = Request(input_url)
     html_page = urlopen(req)
@@ -23,32 +30,17 @@ def add_another(input_url, addon_count, mode, spacer):
     addon_count += len(links)
 
     len_links = len(links)
-    if len_links >= 100:
-        spacer = " "  #Make the output look more... a e s t h e t i c
-    else:
-        spacer = ""
+    spacer = " "  #Make the output look more... a e s t h e t i c
 
     if mode == 1:
         print("==On New Collection===")
     elif mode == 2:
-        spacer += "    "
-        print(spacer + "    ===On sub-sub-collection===")
+        spacer += " "
+        print(spacer + "===On sub-sub-collection===")
     else:
-        print(spacer + "    ===On sub-collection===")
+        print(spacer + "===On sub-collection===")
 
-    if len_links >= 100:
-        log = spacer + "   Collection Item Count: " + str(len_links)
-    elif len_links >= 10:
-        log = spacer + "    Collection Item Count: " + str(len_links)
-    else:
-        log = spacer + "     Collection Item Count: " + str(len_links)
-
-    print(log)
-    i = datetime.now()
-    with open("log.txt", "a", encoding='utf8') as log_write:
-        log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
-
-
+    write_log(spacer + "Collection Item Count: " + str(len_links))
     #go through each mod in collection to get filesize
     x = 1
     link_bank = []
@@ -59,11 +51,7 @@ def add_another(input_url, addon_count, mode, spacer):
 
         try:
             if link_bank.index(url):
-                log = "     Duplicate link: " + str(url)
-                print(log)
-                i = datetime.now()
-                with open("log.txt", "a", encoding='utf8') as log_write:
-                    log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
+                write_log("     Duplicate link: " + str(url))
                 continue  #ignore duplicate link (if this somehow happens, just in case)
 
         except:
@@ -90,17 +78,21 @@ def add_another(input_url, addon_count, mode, spacer):
                 addon_count = details[1]
                 continue
 
-        if x < 10:
-            log = "     " + spacer + str(x) + "| Running total = " + str(total_size)
-        elif x < 100:
-            log = "     " + spacer + str(x) + "| Running total = " + str(total_size)
-        else:
-            log = "     " + spacer + str(x) + "| Running total = " + str(total_size)
+        temp_spacer = ""
+        if len_links >= 100:
+            if x > 9:
+                temp_spacer = "  "
+            elif x > 99:
+                temp_spacer = " "
+            else:
+                temp_spacer = "   "
+        elif len_links >= 10:
+            if x > 9:
+                temp_spacer = " "
+            else:
+                temp_spacer = "  "
 
-        print(log)
-        i = datetime.now()
-        with open("log.txt", "a", encoding='utf8') as log_write:
-            log_write.write(i.strftime('%Y/%m/%d %H:%M:%S') + " || " + log + "\n")
+        write_log(temp_spacer + str(x) + "| Running total = " + str(total_size))
         x += 1
     return [total_size, addon_count - 1]  # - 1 to remove collections counted
 
@@ -123,9 +115,10 @@ num = 1
 for x in sizes:
     print(str(num) + ": " + '{:,}'.format(x) + " MB")
     num += 1
-i = datetime.now()
 
-print("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
-print("Total number of addons: " + str(addon_count))
-print("Taken at " + i.strftime('%Y/%m/%d %H:%M:%S'))
-x = input("\n\nPress ENTER to EXIT")
+write_log("\nTotal size of all collections: " + '{:,}'.format((sum(sizes))) + " MB")
+write_log("Total number of addons: " + str(addon_count))
+i = datetime.now()
+write_log("Taken at " + i.strftime('%Y/%m/%d %H:%M:%S'))
+write_log("\n\nPress ENTER to EXIT")
+input()
