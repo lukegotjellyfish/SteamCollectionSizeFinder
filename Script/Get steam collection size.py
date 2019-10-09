@@ -16,7 +16,10 @@ def write_log(log):  #Show information, log information with timestamp
 
 
 def add_another(input_url, addon_count, mode, spacer):  #On new collection, "add another" instance
-    req = Request(input_url)
+    try:
+        req = Request(input_url)
+    except:
+        return [0, addon_count - 1]
     html_page = urlopen(req)
     soup = BeautifulSoup(html_page, "lxml")  #Parse html with lxml
 
