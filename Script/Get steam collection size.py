@@ -76,7 +76,7 @@ def add_another(input_url, addon_count, mode, spacer):  #On new collection, "add
                 total_size += details[0]
                 addon_count = details[1]
                 continue
-        write_log(spacer + "║" + leading_zero.format(x) + "║ Running total = " + "{:,}".format(total_size) + " MB")
+        write_log(spacer + "║" + leading_zero.format(x) + "║ Running total = " + "{:,}".format(total_size) + " MB" + "|" + url)
         x += 1
     print(" ╚═══════════════════════════════════════")
 
