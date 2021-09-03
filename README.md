@@ -1,12 +1,7 @@
-Put links to collections in Collections.txt to be used for size calculation.
+Put steam workshop collection URLs in Collection.txt, line seperated, to be used.
 
-(Tested with Py 3.6.4)
+(Tested with Py 3.9.6)
 
 Requires:
-- bs4
-- urllib
-- decimal
-- lxml
-- datetime
 - requests
-- fnmatch
+- datetime
