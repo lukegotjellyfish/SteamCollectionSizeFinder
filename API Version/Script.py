@@ -5,7 +5,7 @@ from datetime import datetime
 def write_log(log, file="log.txt"):
 	print(log)
 	i = datetime.now()
-	with open("Logs/" + file, "a", encoding='utf8') as log_write:
+	with open(f"Logs/{file}", "a", encoding='utf8') as log_write:
 		log_write.write("[" + i.strftime('%Y/%m/%d %H:%M:%S') + "]" + " || " + log + "\n")
 
 def GetCollectionDetails(collection,key,appId,indentLevel,collectionLog):
@@ -37,7 +37,8 @@ def GetCollectionDetails(collection,key,appId,indentLevel,collectionLog):
 
 				if indentLevel > 0:
 					spacer = "  " * indentLevel
-				write_log(spacer + "[" + str(sortOrder+sortOrderOffset) + "] - " + "Size [" + str(int(itemDetails[1])/1000000) +" MB] - Title [" + itemDetails[2] + "]", collectionLog)
+				write_log(f"{spacer}[{str(sortOrder + sortOrderOffset)}] - Size [{str(int(itemDetails[1]) / 1000000)} MB] - Title [{itemDetails[2]}]", collectionLog)
+
 			else: sortOrderOffset -= 1
 		else:
 			#is a collection
@@ -109,12 +110,12 @@ addon_count = 0
 i = 1
 with open("F:/USBBACKUP/GitHub/SteamCollectionSizeFinder/API Version/Collections.txt", "r", encoding='utf8') as url_file:
 	for line in url_file:
-		print("On: " + line)
+		print(f"On: {line}")
 		collection = line.replace("\n", "")
-		collectionLog = str(i)+". " + collection+".txt"
-		with open("Logs/" + collectionLog, "w") as f: f.close()
+		collectionLog = f"{str(i)}. {collection}.txt"
+		with open(f"Logs/{collectionLog}", "w") as f: f.close()
 		size = GetCollectionDetails(collection,key,appId,indentLevel,collectionLog)
-		write_log("Total size: " + str(size/1000000) + " MB", collectionLog)
+		write_log(f"Total size: {str(size / 1000000)} MB", collectionLog)
 		i += 1
 
 

@@ -23,7 +23,7 @@ def timeend():
 time_array_1 = []
 time_array_2 = []
 
-for i in range(0, 100):
+for _ in range(100):
     timestart()
 
     page = requests.get('https://steamcommunity.com/sharedfiles/filedetails/?id=1593674891.html')
@@ -36,7 +36,7 @@ for i in range(0, 100):
 
 print("\n")
 
-for i in range(0, 100):
+for _ in range(100):
     timestart()
 
     html = urlopen('https://steamcommunity.com/sharedfiles/filedetails/?id=1593674891.html').read()
@@ -46,7 +46,7 @@ for i in range(0, 100):
     time_array_2.append(timeend())
     print("BS4 done")
 
-print("Average for request: " + str(np.mean(time_array_1)))
-print("Total time for request: " + str(sum(time_array_1)))
-print("Average for BS4: " + str(np.mean(time_array_2)))
-print("Total time for BS4: " + str(sum(time_array_2)))
+print(f"Average for request: {str(np.mean(time_array_1))}")
+print(f"Total time for request: {str(sum(time_array_1))}")
+print(f"Average for BS4: {str(np.mean(time_array_2))}")
+print(f"Total time for BS4: {str(sum(time_array_2))}")
